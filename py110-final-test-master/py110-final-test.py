@@ -11,14 +11,14 @@ def user_generator(file_path: str) -> Iterable[Dict]:
 
 
 def dropper(func):
-    def wrapper(file, drop_incorrect):
+    def wrapper(file, drop_incorrect=True):
         f = func(file)
         for user in f:
             if drop_incorrect:
-                if type(user['name'] is str) and re.fullmatch(r'^([A-Z][a-z]+)$', str(user['name'])):
-                    if type(user['surname'] is str) and re.fullmatch(r'^([A-Z][a-z]+)$', str(user['surname'])):
-                        if type(user['sex'] is str) and re.fullmatch(r'([mf])', str(user['sex'])):
-                            if type(user['age']) is int and 17 < user['age'] < 100:
+                if isinstance(user['name'], str) and re.fullmatch(r'^([A-Z][a-z]+)$', str(user['name'])):
+                    if isinstance(user['surname'], str) and re.fullmatch(r'^([A-Z][a-z]+)$', str(user['surname'])):
+                        if isinstance(user['sex'], str) and re.fullmatch(r'([mf])', str(user['sex'])):
+                            if isinstance(user['age'], int) and 17 < user['age'] < 100:
                                 if type(
                                         user['contacts']['email']) is str or None and re.fullmatch(
                                     r'^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$',
@@ -38,3 +38,10 @@ def dropper(func):
 
         return user
     return wrapper
+
+
+if __name__ == "__main__":
+    count = 0
+    for user in dropper(user_generator)("users_2240.json"):
+        count += 1
+    print(count)
